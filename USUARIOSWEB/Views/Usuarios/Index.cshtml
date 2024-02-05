@@ -1,0 +1,89 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
+
+@model IPagedList<USUARIOSWEB.Models.Usuario>
+
+@{
+	ViewData["Title"] = "Usuarios";
+}
+
+<h1>Index</h1>
+
+<div class="breadcrumb">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+		</ol>
+	</nav>
+</div>
+
+<p>
+	<a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model[0].Nombre)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model[0].FechaNacimiento)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model[0].Sexo)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Nombre)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FechaNacimiento)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Sexo)
+				</td>
+				<td>
+					<a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.IdUsuario" id="editLink">Edit</a> |
+					<a asp-action="Details" class="btn btn-primary" asp-route-id="@item.IdUsuario" id="detailsLink">Details</a> |
+					<a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdUsuario" id="deleteLink">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+<div class="pagination">
+	@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { DisplayItemSliceAndTotal = true,
+	MaximumPageNumbersToDisplay = 5, LinkToFirstPageFormat = "««", LinkToPreviousPageFormat = "«", LinkToNextPageFormat = "»", LinkToLastPageFormat = "»»" })
+</div>
+<div class="mt-3">
+	<a asp-action="DownloadExcel" class="btn btn-success">Download Excel</a>
+</div>
+<script>
+	document.getElementById('editLink').addEventListener('click', function () {
+		// Registra el evento en Firebase Analytics para el enlace "Edit"
+		firebase.analytics().logEvent('clic_en_edit_link', { 'categoria': 'enlace_editar' });
+	});
+
+	document.getElementById('detailsLink').addEventListener('click', function () {
+		// Registra el evento en Firebase Analytics para el enlace "Details"
+		firebase.analytics().logEvent('clic_en_details_link', { 'categoria': 'enlace_detalles' });
+	});
+
+	document.getElementById('deleteLink').addEventListener('click', function () {
+		// Registra el evento en Firebase Analytics para el enlace "Delete"
+		firebase.analytics().logEvent('clic_en_delete_link', { 'categoria': 'enlace_eliminar' });
+	});
+
+	document.getElementById('downloadExcelLink').addEventListener('click', function () {
+		// Registra el evento en Firebase Analytics para el enlace "Download Excel"
+		firebase.analytics().logEvent('clic_en_download_excel_link', { 'categoria': 'enlace_descargar_excel' });
+	});
+</script>
